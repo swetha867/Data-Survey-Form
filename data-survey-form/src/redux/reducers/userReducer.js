@@ -2,13 +2,6 @@
 
 // Step 1 initialize state
 const INITIAL_STATE = {
-//   -	User first and last name *
-// -	Address*
-// -	Birth date *
-// -	Education level  (options: high school, college, graduate studies, Ph.D)
-// -	Height (feet, inches)
-// -	Phone  *  				
-// -	e-mail (and another field to confirm e-mail) *
 
   firstName: '',
   lastName: '',
@@ -20,15 +13,12 @@ const INITIAL_STATE = {
   email: '',
   educationLevel:'',
   feet:0,
-  inches:0,
-  birthDate:null,
-  //phoneNumber:null
+  inches:null,
+  birthDate:new Date()
 
 };
 
-// Step 2 create listener function
 const userReducer = (state = INITIAL_STATE, action) => {
-  // Step 3 create switch for action types
   switch (action.type) {
     case 'SET_FIRST_NAME':
       return {
@@ -37,9 +27,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
       };
     case 'SET_LAST_NAME':
       return {
-        ...state, // spread operator
-        // email: state.email,
-        // isLoggedIn: state.isLoggedIn,
+        ...state, 
         lastName: action.lastName,
       };
     case 'SET_CITY':
@@ -94,11 +82,6 @@ const userReducer = (state = INITIAL_STATE, action) => {
                   ...state,
                   inches :action.inches,
                 };  
-                // case 'SET_PHONE_NUMBER':
-                //   return{
-                //     ...state,
-                //     phoneNumber :action.phoneNumber,
-                //   };  
     default:
       return state;
   }

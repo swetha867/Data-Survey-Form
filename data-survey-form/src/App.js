@@ -9,8 +9,10 @@ const App=({dispatch})=> {
 
  
   return (
-    <Router>
-
+    <Router  basename={process.env.PUBLIC_URL}>
+      <div></div>
+        <h4  style={{ "text-align" :"center"}}>CSC 642 Summer 2020 Individual Assignment Swetha Govindu</h4>
+        
 <Switch>
     <Route path="/ResultsVerify" component={ResultsVerify} />
     <Route exact path="/" component={surveyForm} />

@@ -7,11 +7,12 @@ import {setAddressLine,setCity,setEducationLevel,setEmail,setFeet,SetLastName,
 from '../redux/actions/userActions';
 import { Redirect } from "react-router-dom";
 
+import DatePicker from "react-datepicker";
 
 
 
 const SurveyForm= ({dispatch,email})=>{
-  const [birthDate, setBirthDate] = React.useState(new Date());
+  const [birthDate1, setBirthDate1] = React.useState(new Date());
   const [validatePage ,setValidatePage]=React.useState(false);
   const[confirmEmail,setConfirmEmail]=React.useState(null);
   const[errorMessage,setErrorMessage]=React.useState(null);
@@ -19,7 +20,7 @@ const SurveyForm= ({dispatch,email})=>{
   const handleSubmit = () => {
     console.log(email);
     console.log(confirmEmail);
-
+    dispatch(setBirthDate(birthDate1))
     if(email!=confirmEmail){
       setErrorMessage("Email ids dont match. Please reenter");
     }
@@ -32,29 +33,39 @@ const SurveyForm= ({dispatch,email})=>{
   if (validatePage) {
     return <Redirect to="/ResultsVerify"/>;
   } 
+  const handleChange = (e) => {
 
-    return(  <div class="container">
-    {/* <div class="py-5 text-center">
-      <h2>Data Survey form</h2>
-    </div> */}
-<div class="card" >
-<div class="card-header text-center">
-  CSC 642 Summer 2020 Individual Assignment Swetha Govindu
+    dispatch(setBirthDate(e.target.value));
+
+  }
+
+
+    return(  <div class="container-fluid bg-light">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-5.5">
+
+<div class="card bg-white " >
+
+<div class="card-header bg-info waves-light  text-center">
+<h4 class="text-white">Data Survey Form</h4>
+
   </div>
-  <div class="py-5 text-center">
+  {/* <div class="py-5 text-center">
       <h2>Data Survey Form</h2>
-    </div>
-    <div class="row">
-      
-      </div>
+    </div> */}
+    
+    {/* <div class="col-md-4">
+      <img src="https://source.unsplash.com/WEQbe2jBg40/414x512" class="card-img" alt="..."></img>
+    </div> */}
       <div class="col-md-8 mx-auto">
-      
-        <span class="form-text small text-muted">
-        <span style={{ "color": "red" }}>*</span> fields are mandatory
-       </span>
-        <form class="justify-content-center" novalidate>
+
+       <form  novalidate>
+          <br/>
           <div class="row" style={{"float":"center"}}>
-            <div class="col-md-6 mb-3">
+
+            <div class="col-md-6 mb-2">
               <label for="firstName">First name<span style={{ "color": "red" }}>*</span></label>
               <input type="inputfirstName" class="form-control" id="inputFirstName" onChange={(event) => dispatch(setFirstName(event.target.value))} pattern = "[A-Za-z\s]+" placeholder="First Name"  required></input>
               <span class="form-text small text-muted">
@@ -64,7 +75,7 @@ const SurveyForm= ({dispatch,email})=>{
                 Valid first name is .
               </div>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
               <label for="lastName">Last name <span style={{ "color": "red" }}>*</span></label>
               <input type="lastName" class="form-control" id="inputLastName" onChange={(event) => dispatch(SetLastName(event.target.value))} pattern = "[A-Za-z\s]+" placeholder="Last name"  required></input>
               <div class="invalid-feedback">
@@ -73,7 +84,7 @@ const SurveyForm= ({dispatch,email})=>{
             </div>
           </div>
 
-         
+
           <div class="mb-3">
             <label for="address">Address <span style={{ "color": "red" }}>*</span></label>
             <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" maxlength="40"  onChange={(event) => dispatch(setAddressLine(event.target.value))} pattern="[0-9]+[A-Za-z\s]+[A-Za-z\s]"></input>
@@ -83,7 +94,7 @@ const SurveyForm= ({dispatch,email})=>{
           </div>
 
           <div class="row">
-            <div class="col-md-5 mb-3">
+            <div class="col-md-4 mb-3">
               <label for="city">City <span style={{ "color": "red" }}>*</span></label>
               <input type="text" class="form-control" onChange={(event) => dispatch(setCity(event.target.value))} id="inputCity"></input>
              <div class="valid-feedback">
@@ -157,11 +168,11 @@ const SurveyForm= ({dispatch,email})=>{
                 Please provide a valid state.
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="zip">Zip <span style={{ "color": "red" }}>*</span></label>
-              <input type="text" class="form-control" id="zip" placeholder="" ></input>
+            <div class="col-md-4 mb-3">
+              <label for="zip">Zipcode <span style={{ "color": "red" }}>*</span></label>
+              <input type="text" class="form-control" onChange={event=> dispatch(setZipCode(event.target.value))} id="zip" placeholder="ZipCode" ></input>
               <span class="form-text small text-muted">
-       ZipCode must contain five positive digits.
+       Zip must contain five  digits
        </span>
               <div class="invalid-feedback">
                 Zip code .
@@ -169,18 +180,19 @@ const SurveyForm= ({dispatch,email})=>{
             </div>
           </div>
           <div class="mb-3">
+          <div class="row">
+          <div class="col-md-6">
+
             <label for="username">Birth date <span style={{ "color": "red" }}>*</span></label>
             <div class="input-group">
             
-                <input type="date" class="form-control" id="Email" placeholder="Email" ></input>
-
-
-                {/* <DatePicker type="date" selected={startDate} onChange={date => setStartDate(date)} placeholder="Bith Date"/> */}
+                <input type="date"  onChange={event=> (setBirthDate1(event.target.value))} class="form-control" id="date"  ></input>
+                {/* <DatePicker type="date" id ="birthDate"  onChange={event=> dispatch(setBirthDate(event.target.value))}  placeholder="Bith Date"/> */}
             
             </div>
-          </div>
-          <div class="mb-3">
-          <label for="inputEducationLevel">Education level <span class="text-muted">  (Optional)</span></label>
+            </div>
+            <div class="col-md-6">
+            <label for="inputEducationLevel">Education level <span class="text-muted">  (Optional)</span></label>
             <div class="input-group">
             
             <select id="inputEducation" name="Education" class="form-control" onChange={(event) => dispatch(setEducationLevel(event.target.value))} placeholder="Education">
@@ -189,9 +201,13 @@ const SurveyForm= ({dispatch,email})=>{
                   <option>College</option>
                   <option>Graduate Study</option>
                   <option>PHD</option>
-    </select>              
+            </select>  
+            </div>           
+            </div>
+            
             </div>
           </div>
+          
           <div class="mb-3">
           <label for="inputHeight">Height<span class="text-muted">  (Optional)</span>  </label> 
             <div class="row">
@@ -201,8 +217,8 @@ const SurveyForm= ({dispatch,email})=>{
 
   </div>
   <div class="col-md-6">
-  <input type="number"  min="0" class="form-control" placeholder="Inches" placeholder="Inches"
-             onChange={event=> dispatch(setInches(event.target.value))} id="inputCm"></input>
+  <input type="number"  min="0" class="form-control" placeholder="Inches" 
+             onChange={event=> dispatch(setInches(event.target.value))} id="inputInches"></input>
   </div>
             </div>
           </div>
@@ -241,8 +257,10 @@ const SurveyForm= ({dispatch,email})=>{
        </span> */}
             <div class="input-group-append">
     <span class="input-group-text" id="basic-addon2"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-  </div>
-            </div>
+  </div></div>
+  <span class="form-text small text-muted">
+      Make Sure two emails are identical
+       </span>
           </div>
 
           <div class="form-group">
@@ -258,14 +276,13 @@ const SurveyForm= ({dispatch,email})=>{
                             <input class="form-control d-none" data-recaptcha="true" required data-error="Please complete the Captcha" />
                             <div class="help-block with-errors"></div>
     </div>
-          <button class="btn btn-primary btn-lg btn-block" type="submit" onClick={handleSubmit}>Submit</button>
+          <button class="btn btn-info btn-lg btn-block" type="submit" onClick={handleSubmit}>Submit</button>
 
-         </form>
-</div>
+         </form></div>
       
       </div>
     </div>
-
+</div></div>
   
     )
 };

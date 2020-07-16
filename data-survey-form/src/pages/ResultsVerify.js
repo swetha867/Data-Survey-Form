@@ -6,115 +6,225 @@ import { Map, GoogleApiWrapper } from 'google-maps-react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 const ResultsVerify=({dispatch,firstName,lastName,city,state,zipCode,addressLine,phoneNumber,email,feet,inches,birthDate,educationLevel})=> {
+  const google = window.google;
+
+  // const mapStyles = {
+  //   width: '100%',
+  //   height: '100%'
+  // };
+  // const containerStyle = {
+  //   width: '400px',
+  //   height: '400px'
+  // };
    
-  const mapStyles = {
-    width: '100%',
-    height: '100%'
-  };
-  const containerStyle = {
-    width: '400px',
-    height: '400px'
-  };
+  // const center = {
+  //   lat:37.7241,
+  //   lng: 122.4799
+  // };
    
-  const center = {
-    lat:37.7241,
-    lng: 122.4799
-  };
-   
-const MyMapComponent = withScriptjs(withGoogleMap((props) =>
-<GoogleMap
-  defaultZoom={8}
-  defaultCenter={{ lat: 37.7241, lng: 122.4799}}
->
-  {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
-</GoogleMap>
-))
-  function MyComponent() {
-    const [map, setMap] = React.useState(null)
-   
-    const onLoad = React.useCallback(function callback(map) {
-      const bounds = new window.google.maps.LatLngBounds();
-      map.fitBounds(bounds);
-      setMap(map)
-    }, [])
-   
-    const onUnmount = React.useCallback(function callback(map) {
-      setMap(null)
-    }, [])
+  function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 8,
+      center: {lat: -34.397, lng: 150.644}
+    });
+    var geocoder = new google.maps.Geocoder();
+
+    window.onload = geocodeAddress(geocoder, map);
   }
+
+  function geocodeAddress(geocoder, resultsMap) {
+    var address = addressLine+";"+city+";"+state+";"+zipCode;
+    geocoder.geocode({'address': address}, function(results, status) {
+      if (status === 'OK') {
+        resultsMap.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+          map: resultsMap,
+          position: results[0].geometry.location
+        });
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+// const MyMapComponent = withScriptjs(withGoogleMap((props) =>
+// <GoogleMap
+//   defaultZoom={8}
+//   defaultCenter={{ lat: 37.7241, lng: 122.4799}}
+// >
+//   {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
+// </GoogleMap>
+// ))
+//   function MyComponent() {
+//     const [map, setMap] = React.useState(null)
+   
+//     const onLoad = React.useCallback(function callback(map) {
+//       const bounds = new window.google.maps.LatLngBounds();
+//       map.fitBounds(bounds);
+//       setMap(map)
+//     }, [])
+   
+//     const onUnmount = React.useCallback(function callback(map) {
+//       setMap(null)
+//     }, [])
+//   }
    
    
    
    return(
-<div class="container">
-<div class="card text-center">
-  <div class="card-header">
-  CSC 642 Summer 2020 Individual Assignment Swetha Govindu
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">Data survey Form Summary</h5>
-    <div class="card-text">
+<div class="container-fluid bg-light">
 
+<div class="row justify-content-center">
 
-  
-  <div class="form-label-group">
-      <label for="inputFirstName">First Name</label>{firstName}
-    </div>
-    <div class="form-label-group">
-      <label for="inputLastName">Last Name </label>{lastName}     
-  </div>
-  <div class="form-label-group">
-    <label for="inputAddress">Address</label>{addressLine}
-  </div>
-  <div class="form-label-group">
-  <label for="inputCity">City </label>{city}
-  </div>
-    
-    <div class="form-label-group">
-      <label for="inputState">State </label>{state}
-    
-    </div>
-    <div class="form-label-group">
-      <label for="inputZip">Zip </label>{zipCode}
-    </div>
-  <div class="form-label-group">
-      <label for="inputBirthDate">Birth date  </label>{birthDate}
-       </div>
-  
-  <div class="form-label-group">
-    <label for="inputEducationLevel">Education Level</label>{educationLevel}
-    
-  </div>
-  {feet &&(
-  <div class="form-label-group">
-  <label for="inputHeight">Height </label> {feet} feet {inches} inches
-    </div>)}
+    <div class="col-lg-5.5">
 
+<div class="card bg-white " >
+<div class="card-header bg-info waves-light  text-center">
+{/* <div class="card-header waves-light active waves-effect waves-light text-center"> */}
+<h4 class="text-white">          Data Survey Form Summary             </h4>
+</div>
+{/* <div class="py-5 text-center">
+  <h2>Data Survey Form</h2>
+</div> */}
+<div class="row">
   
-  
-  <div class="form-label-group">
-      <label for="inputPhone">Phone number </label>{phoneNumber}
   </div>
-  <div class="form-label-group">
-      <label for="inputEmail">Email Address </label>{email}
+  <div class="col-md-8 mx-auto">
+  
+   <form  novalidate>
+      <br/>
+      <div class="row" style={{"float":"center"}}>
+
+        <div class="col-md-6 mb-3">
+          <label for="firstName">First Name</label>
+        </div>
+        <div class="col-md-6 mb-3">
+        {firstName}
+        </div>
         
-  </div>
-  {/* https://maps.googleapis.com/maps/api/geocode/json?address=high+st+hasting&components=country:GB
-&key=YOUR_API_KEY */}
-  <MyMapComponent
-  isMarkerShown
-  googleMapURL="https://maps.googleapis.com/maps/api/geocode/json?address=high+st+hasting&components=country:GB
-  &key=AIzaSyDKthUAQZzDQWjiDSwp20RitR8-d9qP1Bw"
-  loadingElement={<div style={{ height: `100%` }} />}
-  containerElement={<div style={{ height: `400px` }} />}
-  mapElement={<div style={{ height: `100%` }} />}
-/>
-  
-  {/* <div class="card-footer text-muted">
-    2 days ago
-  </div> */}
-</div></div></div></div>
+      </div>
+      <div class="row" style={{"float":"center"}}>
+
+      <div class="col-md-6 mb-3">
+          <label for="lastName">Last name </label>
+          
+        </div>
+        <div class="col-md-6 mb-3">
+        {lastName}
+        </div>
         
+      </div>
+      <div class="row" style={{"float":"center"}}>
+
+          <div class="col-md-6 mb-3">
+        <label for="address">Address</label>
+    
+        </div>
+        <div class="col-md-6 mb-3">
+        {addressLine}
+        </div>
+  
+      </div>
+      <div class="row" style={{"float":"center"}}>
+
+          <div class="col-md-6 mb-3">
+        <label for="city">City</label>
+    
+        </div>
+        <div class="col-md-6 mb-3">
+        {city}
+        </div>
+  
+      </div>
+      
+      <div class="row" style={{"float":"center"}}>
+
+      <div class="col-md-6 mb-3">
+<label for="state">State</label>
+
+</div>
+<div class="col-md-6 mb-3">
+{state}
+</div>
+
+</div>
+<div class="row" style={{"float":"center"}}>
+
+<div class="col-md-6 mb-3">
+<label for="zipcode">Zipcode</label>
+
+</div>
+<div class="col-md-6 mb-3">
+{zipCode}
+</div>
+
+</div>
+<div class="row" style={{"float":"center"}}>
+
+<div class="col-md-6 mb-3">
+<label for="birthdate">BirthDate</label>
+
+</div>
+<div class="col-md-6 mb-3">
+{birthDate}
+</div>
+
+</div>
+{educationLevel && (
+
+<div class="row" style={{"float":"center"}}>
+<div class="col-md-6 mb-3">
+<label for="inputEducationLevel">Education level</label>
+
+</div>
+<div class="col-md-6 mb-3">
+{educationLevel}
+</div>
+
+</div>)}
+{feet &&(      
+
+<div class="row" style={{"float":"center"}}>
+
+<div class="col-md-6 mb-3">
+
+<label for="height">Height</label>
+</div> \
+<div class="col-md-6 mb-3">
+{feet} Feet   {inches} Inches 
+</div>
+
+</div> )}
+<div class="row" style={{"float":"center"}}>
+
+<div class="col-md-6 mb-3">
+<label for="Phone number">Phone number</label>
+
+</div>
+<div class="col-md-6 mb-3">
+{phoneNumber}
+</div>
+
+</div>
+<div class="row" style={{"float":"center"}}>
+
+<div class="col-md-6 mb-3">
+<label for="email">Email address</label>
+
+</div>
+<div class="col-md-6 mb-3">
+  {email}
+</div>
+
+</div>
+<div id="map"  style={{"height":"100%"}}></div>
+
+         
+     </form></div>
+  
+  </div>
+</div>
+</div></div>
+
     )
 }
 

@@ -1,4 +1,4 @@
-export const setFirstName = firstName => ({ // 1 param = no parentheses
+export const setFirstName = firstName => ({ 
   type: 'SET_FIRST_NAME',
   firstName,
 });
