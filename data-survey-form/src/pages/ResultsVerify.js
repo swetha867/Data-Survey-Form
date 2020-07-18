@@ -1,233 +1,133 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Map, GoogleApiWrapper } from 'google-maps-react';
-
-
+import GoogleMapReact from 'google-maps-react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
 
 const ResultsVerify=({dispatch,firstName,lastName,city,state,zipCode,addressLine,phoneNumber,email,feet,inches,birthDate,educationLevel})=> {
   const google = window.google;
+  const[googlemapsrc,setGooglemapsrc]=React.useState("https://www.google.com/maps/embed/v1/place?key=site_key&q="+city+""+addressLine+""+state+""+zipCode);
 
-  // const mapStyles = {
-  //   width: '100%',
-  //   height: '100%'
-  // };
-  // const containerStyle = {
-  //   width: '400px',
-  //   height: '400px'
-  // };
+  // setGooglemapsrc("https://www.google.com/maps/embed/v1/place?key=AIzaSyAeJ-EPgN1ctwzOBO6-jyseWKdl_C-wqxA&q="+city+" "+addressLine+" "+state+" "+zipCode);
    
-  // const center = {
-  //   lat:37.7241,
-  //   lng: 122.4799
-  // };
-   
-  function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 8,
-      center: {lat: -34.397, lng: 150.644}
-    });
-    var geocoder = new google.maps.Geocoder();
 
-    window.onload = geocodeAddress(geocoder, map);
-  }
-
-  function geocodeAddress(geocoder, resultsMap) {
-    var address = addressLine+";"+city+";"+state+";"+zipCode;
-    geocoder.geocode({'address': address}, function(results, status) {
-      if (status === 'OK') {
-        resultsMap.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-          map: resultsMap,
-          position: results[0].geometry.location
-        });
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-  }
-// const MyMapComponent = withScriptjs(withGoogleMap((props) =>
-// <GoogleMap
-//   defaultZoom={8}
-//   defaultCenter={{ lat: 37.7241, lng: 122.4799}}
-// >
-//   {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
-// </GoogleMap>
-// ))
-//   function MyComponent() {
-//     const [map, setMap] = React.useState(null)
-   
-//     const onLoad = React.useCallback(function callback(map) {
-//       const bounds = new window.google.maps.LatLngBounds();
-//       map.fitBounds(bounds);
-//       setMap(map)
-//     }, [])
-   
-//     const onUnmount = React.useCallback(function callback(map) {
-//       setMap(null)
-//     }, [])
-//   }
-   
-   
    
    return(
 <div class="container-fluid bg-light">
 
-<div class="row justify-content-center">
 
-    <div class="col-lg-5.5">
+{/* <Map
+        google={this.props.google}
+        zoom={14}
+        style={mapStyles}
+        initialCenter={{
+         lat: -1.2884,
+         lng: 36.8233
+        }}
+      /> 
+       <div >
+            <div id="iframe-container" class="widthAndHeightOneHundredPercent">
+            {/* <iframe class="widthAndHeightOneHundredPercent removeBorder" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAeJ-EPgN1ctwzOBO6-jyseWKdl_C-wqxA&q={{property.city}} {{property.streetAddress}} {{property.state}} {{property.zipcode}}"
+                    allowfullscreen>
+                </iframe> 
+           <br/>
+           <br/>
 
-<div class="card bg-white " >
-<div class="card-header bg-info waves-light  text-center">
-{/* <div class="card-header waves-light active waves-effect waves-light text-center"> */}
-<h4 class="text-white">          Data Survey Form Summary             </h4>
-</div>
-{/* <div class="py-5 text-center">
-  <h2>Data Survey Form</h2>
-</div> */}
-<div class="row">
-  
-  </div>
-  <div class="col-md-8 mx-auto">
-  
-   <form  novalidate>
-      <br/>
-      <div class="row" style={{"float":"center"}}>
-
-        <div class="col-md-6 mb-3">
-          <label for="firstName">First Name</label>
+            </div>
         </div>
-        <div class="col-md-6 mb-3">
-        {firstName}
-        </div>
-        
-      </div>
-      <div class="row" style={{"float":"center"}}>
-
-      <div class="col-md-6 mb-3">
-          <label for="lastName">Last name </label>
-          
-        </div>
-        <div class="col-md-6 mb-3">
-        {lastName}
-        </div>
-        
-      </div>
-      <div class="row" style={{"float":"center"}}>
-
-          <div class="col-md-6 mb-3">
-        <label for="address">Address</label>
-    
-        </div>
-        <div class="col-md-6 mb-3">
-        {addressLine}
-        </div>
-  
-      </div>
-      <div class="row" style={{"float":"center"}}>
-
-          <div class="col-md-6 mb-3">
-        <label for="city">City</label>
-    
-        </div>
-        <div class="col-md-6 mb-3">
-        {city}
-        </div>
-  
-      </div>
-      
-      <div class="row" style={{"float":"center"}}>
-
-      <div class="col-md-6 mb-3">
-<label for="state">State</label>
-
-</div>
-<div class="col-md-6 mb-3">
-{state}
-</div>
-
-</div>
-<div class="row" style={{"float":"center"}}>
-
-<div class="col-md-6 mb-3">
-<label for="zipcode">Zipcode</label>
-
-</div>
-<div class="col-md-6 mb-3">
-{zipCode}
-</div>
-
-</div>
-<div class="row" style={{"float":"center"}}>
-
-<div class="col-md-6 mb-3">
-<label for="birthdate">BirthDate</label>
-
-</div>
-<div class="col-md-6 mb-3">
-{birthDate}
-</div>
-
-</div>
-{educationLevel && (
-
-<div class="row" style={{"float":"center"}}>
-<div class="col-md-6 mb-3">
-<label for="inputEducationLevel">Education level</label>
-
-</div>
-<div class="col-md-6 mb-3">
-{educationLevel}
-</div>
-
-</div>)}
-{feet &&(      
-
-<div class="row" style={{"float":"center"}}>
-
-<div class="col-md-6 mb-3">
-
-<label for="height">Height</label>
-</div> \
-<div class="col-md-6 mb-3">
-{feet} Feet   {inches} Inches 
-</div>
-
-</div> )}
-<div class="row" style={{"float":"center"}}>
-
-<div class="col-md-6 mb-3">
-<label for="Phone number">Phone number</label>
-
-</div>
-<div class="col-md-6 mb-3">
-{phoneNumber}
-</div>
-
-</div>
-<div class="row" style={{"float":"center"}}>
-
-<div class="col-md-6 mb-3">
-<label for="email">Email address</label>
-
-</div>
-<div class="col-md-6 mb-3">
-  {email}
-</div>
-
-</div>
-<div id="map"  style={{"height":"100%"}}></div>
-
-         
      </form></div>
   
   </div>
+</div></div></div> */}
+
+<div class="card " >
+<div class="card-header bg-info waves-light  text-center">
+<div class="card-header waves-light active waves-effect waves-light text-center"> 
+<h4 class="text-white">                       Thanks for taking the survey!! Here is your  Survey  Summary                    </h4>
 </div>
-</div></div>
+ </div>
+ <div class="col-md-8 mx-auto">
 
-    )
+<div class="table-responsive">
+<table class="table" style={{"    table-layout": "fixed"}}>
+  
+  <tbody>
+    <tr>
+      {/* <th scope="row">1</th> */}
+      <td> Name</td>
+      <td>{firstName} {lastName}</td>
+
+      {/* <td>Otto</td>
+      <td>@mdo</td> */}
+    </tr>
+    <tr>
+      <td> Address</td>
+      <td>{addressLine} {city} {state} {zipCode}</td>
+    </tr>
+    <tr>
+      <td> BirthDate</td>
+      <td>{birthDate.toString()} </td>
+    </tr>
+    <tr>
+      <td> Phone Number</td>
+      <td>{phoneNumber} </td>
+    </tr>
+    <tr>
+      <td> Email</td>
+      <td>{email} </td>
+    </tr>
+    {educationLevel && (
+
+    <tr>
+      <td> Education Level</td>
+      <td>{educationLevel} </td>
+    </tr>)}
+    {feet &&(      
+
+    <tr>
+      <td> Height</td>
+      <td>{feet} feet {inches} inches </td>
+    </tr>
+    )}
+  </tbody>
+</table>
+<div>
+                <iframe  width="600"
+  height="450"
+  frameborder="0" style={{"border":"0"}} 
+  
+  class="widthAndHeightOneHundredPercent removeBorder" src={googlemapsrc}
+                    allowfullscreen>
+                </iframe>
+                <br/><br/><br/>
+                </div>
+</div></div></div>
+</div>
+    );
+
 }
-
+const mapStyles = {
+  width: '100%',
+  height: '100%'
+};
+export class MapContainer extends Component {
+  render() {
+    return (
+      <Map
+        google={this.props.google}
+        zoom={14}
+        style={mapStyles}
+        initialCenter={{
+         lat: -1.2884,
+         lng: 36.8233
+        }}
+      />
+    );
+  }
+}
 const mapStateToProps = (state) => {
     return {
       firstName: state.userReducer.firstName,
@@ -246,5 +146,19 @@ const mapStateToProps = (state) => {
   
     };
   };
+  // export default GoogleApiWrapper(
+  //   (props) => ({
+  //     apiKey: props.apiKey
+  //   }
+  // ))(MapContainer)
+  // const WrappedContainer = GoogleApiWrapper({
+  //   (props) => ({
+  //         apiKey: props.apiKey
+  //          })(ResultsVerify);
+  //   export default   connect(mapStateToProps)(ResultsVerify);
 
- export default connect(mapStateToProps)(ResultsVerify);
+
+  const WrappedContainer = GoogleApiWrapper({
+    apiKey: "AIzaSyBvPRbd0bX_ndUcnBLb0th6uK02kQOJAN0"
+    })(ResultsVerify);
+  export default connect(mapStateToProps)(ResultsVerify);

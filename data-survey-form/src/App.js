@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import  ResultsVerify from "./pages/ResultsVerify";
-import example2 from './pages/surveyForm';
+//import example2 from './pages/surveyForm';
 import surveyForm from './pages/surveyForm';
+import map from './pages/MapContainer';
 
 const App=({dispatch})=> {
 
@@ -15,6 +16,8 @@ const App=({dispatch})=> {
         
 <Switch>
     <Route path="/ResultsVerify" component={ResultsVerify} />
+    <Route path="/map" component={map} />
+
     <Route exact path="/" component={surveyForm} />
 </Switch>
 </Router>
